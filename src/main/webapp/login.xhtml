@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en"
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:f="http://xmlns.jcp.org/jsf/core"
+    xmlns:h="http://xmlns.jcp.org/jsf/html"
+    xmlns:p="http://primefaces.org/ui"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+>
+<h:head>
+	<title>Login</title>
+</h:head>
+	<body>
+			<h:form id="form">
+			  	<p:growl id="grwNotification" showDetail="false" sticky="true"></p:growl>
+			  	<p:panelGrid columns="2">
+			    	<p:outputLabel for="txtLogin" value="user name" />
+			    	<p:inputText id="txtLogin" value="#{userDataBean.user.userName}" maxlength="28" required="true" requiredMessage="user name is required" />
+			   
+			    	
+			    	<p:outputLabel for="txtPassword" value="password" />			    
+			    	<p:password id="txtPassword" required="true" requiredMessage="Password is required" value="#{userDataBean.user.password}" />
+			    	
+			    	<f:facet name="footer"> 
+	                    <p:commandButton actionListener="#{userDataBean.login}" ajax="false" value="Login" update="grwNotification" />
+        			</f:facet>
+			    </p:panelGrid>
+			    
+					   
+				  <p:commandButton icon="pi pi-pencil" update=":dialogs:manage-user-content"  value="Register new user" 
+                    oncomplete="PF('registerUserDialog').show()" process="@this" >                   
+                    <p:resetInput target=":dialogs:manage-user-content" />
+                </p:commandButton>
+	   		</h:form>
+	   		
+    	<h:form id="dialogs">
+			    <p:dialog header="register user" showEffect="fade" modal="true" widgetVar="registerUserDialog"
+		            responsive="true">
+		            <p:outputPanel id="manage-user-content" class="ui-fluid">
+		                <p:outputPanel>
+		                    <div class="field">
+		                        <p:outputLabel for="usernameDlg">User name</p:outputLabel>
+		                        <p:inputText id="usernameDlg"  value="#{userDataBean.newUser.userName}" />
+		                    </div>
+		                    <div class="field">
+		                        <p:outputLabel for="passwordDlg">password</p:outputLabel>
+		                        <p:password id="passwordDlg"  value="#{userDataBean.newUser.password}" />
+		                    </div>
+		                </p:outputPanel>
+		            </p:outputPanel>
+		
+		            <f:facet name="footer">
+		                <p:commandButton value="Save" icon="pi pi-check" actionListener="#{userDataBean.save}"
+		                    update="manage-user-content" process="manage-user-content @this"  oncomplete="PF('registerUserDialog').hide()"/>
+		                <p:commandButton value="Cancel" icon="pi pi-times" onclick="PF('registerUserDialog').hide()"
+		                    class="ui-button-secondary" type="button" />
+		            </f:facet>
+		        </p:dialog>	
+    	</h:form>	   		
+	</body>
+</html>

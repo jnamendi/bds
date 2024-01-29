@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en"
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:f="http://xmlns.jcp.org/jsf/core"
+    xmlns:h="http://xmlns.jcp.org/jsf/html"
+    xmlns:p="http://primefaces.org/ui"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+>
+<h:head>
+	<title>Readers</title>
+</h:head>
+	<body>
+	    <ui:composition template="/template/common.xhtml">	
+	    	<ui:define name="content">	
+			<h:form id="form">
+			  	<p:growl id="messages" showDetail="true" />
+			  	<p:panelGrid columns="2">
+			    	<p:outputLabel for="input" value="Reader name" />
+			    	<p:inputText id="input" value="#{readerBean.reader.name}" maxlength="28"/>
+			    	<f:facet name="footer">
+            			<p:commandButton value="Save" icon="pi pi-check" actionListener="#{readerBean.submit}"
+	                    update="dt-reader" process="input @this" />		 
+        			</f:facet>
+			    </p:panelGrid>
+			    <h:message id="input_m" for="input" />
+			    
+   
+	
+	
+				<p:dataTable id="dt-reader" widgetVar="dtReader" var="reader" value="#{readerBean.readers}" editable="true"
+	                     editMode="cell"  paginator="true" rows="10" paginatorPosition="bottom">
+	                <p:ajax event="cellEdit" listener="#{readerBean.onCellEdit}" update=":form:messages"/>
+		            <f:facet name="header">
+		                <div class="readers-table-header">
+		                    <span style="font-weight: bold">Readers</span>
+		                </div>
+		            </f:facet>	
+		            <p:column headerText="id" sortBy="#{reader.id}" filterBy="#{reader.id}">
+		                <h:outputText value="#{reader.id}" />
+		            </p:column>
+		            <p:column headerText="Name" sortBy="#{reader.name}" filterBy="#{reader.name}">
+		                <p:cellEditor>
+		                    <f:facet name="output">
+		                       <h:outputText value="#{reader.name}" />
+		                    </f:facet>
+		                    <f:facet name="input">
+		                        <p:inputText value="#{reader.name}" style="width:100%" label="Name"/>
+		                    </f:facet>
+		                </p:cellEditor>	                
+		            </p:column>         
+		             <p:column exportable="false">
+		            	<p:commandButton class="ui-button-warning rounded-button" icon="pi pi-trash"
+		                                 process="@this"
+		                                 oncomplete="PF('deleteReaderDialog').show()">
+		                    <f:setPropertyActionListener value="#{reader}" target="#{readerBean.selectedReader}" />
+		                 </p:commandButton>
+		             </p:column>   	
+				</p:dataTable>
+				
+				<p:confirmDialog widgetVar="deleteReaderDialog" showEffect="fade" width="300"
+		            message="Delete the reader?" header="Confirm" severity="warn">
+		            <p:commandButton value="Yes" icon="pi pi-check" actionListener="#{readerBean.deleteReader}"
+		                process="@this" update="dt-reader"
+		                onclick="PF('deleteReaderDialog').hide()" />
+		            <p:commandButton value="No" type="button" styleClass="ui-button-secondary" icon="pi pi-times"
+		                onclick="PF('deleteReaderDialog').hide()" />
+		        </p:confirmDialog>
+	   	
+	   		</h:form>
+			</ui:define>	
+		</ui:composition>	
+	</body>
+</html>

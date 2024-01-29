@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en"
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:f="http://xmlns.jcp.org/jsf/core"
+    xmlns:h="http://xmlns.jcp.org/jsf/html"
+    xmlns:p="http://primefaces.org/ui"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+>
+<h:head>
+	<title>Readers</title>
+</h:head>
+	<body>
+	    <ui:composition template="/template/common.xhtml">	
+	    	<ui:define name="content">	
+			<h:form id="form">
+			  	<p:growl id="messages" showDetail="true" />
+			  	<p:panelGrid columns="2">
+			    	<p:outputLabel for="input" value="Reader" />
+			    	<p:selectOneMenu id="input" value="#{blogReaderBean.selectedReaderInput}" converter="#{readerConverter}"
+                                panelStyle="width:180px" var="r"
+                                filter="true" filterMatchMode="startsWith" filterNormalize="true">
+
+	                    <f:selectItems value="#{blogReaderBean.readers}" var="readerOne"
+	                                itemLabel="#{readerOne.name}" itemValue="#{readerOne}"/>
+	
+		                <p:column>
+	                        <f:facet name="header">
+	                            <h:outputText value="id"/>
+	                        </f:facet>
+	                        <h:outputText value="#{r.id}"/>
+	                    </p:column>
+	                    <p:column>
+	                        <f:facet name="header">
+	                            <h:outputText value="Name"/>
+	                        </f:facet>
+	                        <h:outputText value="#{r.name}"/>
+	                    </p:column>
+	
+	                    <f:facet name="footer">
+	                        <h:outputText value="#{blogReaderBean.readers.size()} readers"
+	                                    style="font-weight:bold;" styleClass="py-1 block"/>
+	                    </f:facet>
+	                </p:selectOneMenu>
+
+			    	<p:outputLabel for="inputBlog" value="Blog" />
+			    	<p:selectOneMenu id="inputBlog" value="#{blogReaderBean.selectedBlogInput}" converter="#{blogConverter}"
+                                panelStyle="width:180px" var="b"
+                                filter="true" filterMatchMode="startsWith" filterNormalize="true">
+
+	                    <f:selectItems value="#{blogReaderBean.blogs}" var="blogOne"
+	                                itemLabel="#{blogOne.tittle}" itemValue="#{blogOne}"/>
+	
+		                <p:column>
+	                        <f:facet name="header">
+	                            <h:outputText value="id"/>
+	                        </f:facet>
+	                        <h:outputText value="#{b.id}"/>
+	                    </p:column>
+	                    <p:column>
+	                        <f:facet name="header">
+	                            <h:outputText value="Tittle"/>
+	                        </f:facet>
+	                        <h:outputText value="#{b.tittle}"/>
+	                    </p:column>
+	
+	                    <f:facet name="footer">
+	                        <h:outputText value="#{blogReaderBean.blogs.size()} blogs"
+	                                    style="font-weight:bold;" styleClass="py-1 block"/>
+	                    </f:facet>
+	                </p:selectOneMenu>	                
+			    	<f:facet name="footer">
+            			<p:commandButton value="Save" icon="pi pi-check" actionListener="#{blogReaderBean.submit}"
+	                    update="dt-blog" process="input inputBlog @this" />		 
+        			</f:facet>
+			    </p:panelGrid>
+			    <h:message id="input_m" for="input" />
+			    
+   
+	
+	
+				<p:dataTable id="dt-blog" widgetVar="dtBlog" var="blog" rowKey="#{blog.id}" value="#{blogReaderBean.blogs}" paginator="true" rows="10" paginatorPosition="bottom"
+							rowExpandMode = "single">            
+		            <f:facet name="header">
+		                <div class="readers-table-header">
+		                    <span style="font-weight: bold">Readers and blogs</span>
+		                </div>
+		            </f:facet>	
+		            <p:column headerText="id" sortBy="#{blog.id}" filterBy="#{blog.id}">
+		                <h:outputText value="#{blog.id}" />
+		            </p:column>
+		            <p:column headerText="Tittle" sortBy="#{blog.tittle}" filterBy="#{blog.tittle}">
+		            	<h:outputText value="#{blog.tittle}" />             
+		            </p:column> 
+		            <p:column headerText="Description" sortBy="#{blog.description}" filterBy="#{blog.description}">
+		            	<h:outputText value="#{blog.description}" />		                  
+		            </p:column>        
+
+				</p:dataTable>
+				
+	   			<p:confirmDialog widgetVar="deleteReaderDialog" showEffect="fade" width="300"
+		            message="Delete the reader?" header="Confirm" severity="warn">
+		            <p:commandButton value="Yes" icon="pi pi-check" actionListener="#{blogReaderBean.delete}"
+		                process="@this" update="dt-blog"
+		                onclick="PF('deleteReaderDialog').hide()" />
+		            <p:commandButton value="No" type="button" styleClass="ui-button-secondary" icon="pi pi-times"
+		                onclick="PF('deleteReaderDialog').hide()" />
+		        </p:confirmDialog>
+	   		</h:form>
+			</ui:define>	
+		</ui:composition>	
+	</body>
+</html>

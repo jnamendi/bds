@@ -1,0 +1,17 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui">
+
+	<ui:composition> 
+		<h:form id="menuform">
+	        <p:panelMenu style="width:300px">
+	            <p:submenu label="Menu principal">
+	                <p:menuitem value="Readers" outcome="reader" icon="pi pi-external-link"/>
+	                <p:menuitem value="Blogs" outcome="blog"  icon="pi pi-external-link"/>
+	                <p:menuitem value="Readers por Blog"  outcome="readerBlog"  icon="pi pi-external-link"/>
+	            </p:submenu>
+	        </p:panelMenu>
+        </h:form>
+	</ui:composition>
+</html>

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<faces-config
+    xmlns="http://xmlns.jcp.org/xml/ns/javaee"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-facesconfig_2_3.xsd"
+    version="2.3">
+     
+  <navigation-rule>
+	  <from-view-id>*</from-view-id> 
+	  <navigation-case>
+	   <from-outcome>reader</from-outcome>
+	   <to-view-id>/reader.xhtml</to-view-id>
+	  </navigation-case> 
+ </navigation-rule> 
+ 
+ <navigation-rule>
+	  <from-view-id>*</from-view-id> 
+	  <navigation-case>
+	   <from-outcome>blog</from-outcome>
+	   <to-view-id>/blog.xhtml</to-view-id>
+	  </navigation-case> 
+ </navigation-rule> 
+ 
+  <navigation-rule>
+	  <from-view-id>*</from-view-id> 
+	  <navigation-case>
+	   <from-outcome>readerBlog</from-outcome>
+	   <to-view-id>/readerBlog.xhtml</to-view-id>
+	  </navigation-case> 
+ </navigation-rule> 
+
+</faces-config>
