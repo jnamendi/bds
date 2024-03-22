@@ -31,6 +31,6 @@ public class Blog {
     @Column(name = "description")
 	private String description;
     
-    @ManyToMany(mappedBy = "blogs")
+    @ManyToMany(mappedBy = "blogs",fetch = FetchType.EAGER)
     private Set<Reader> readers = new HashSet<>();
 }

@@ -15,97 +15,115 @@
 			<h:form id="form">
 			  	<p:growl id="messages" showDetail="true" />
 			  	<p:panelGrid columns="2">
-			    	<p:outputLabel for="input" value="Reader" />
-			    	<p:selectOneMenu id="input" value="#{blogReaderBean.selectedReaderInput}" converter="#{readerConverter}"
-                                panelStyle="width:180px" var="r"
-                                filter="true" filterMatchMode="startsWith" filterNormalize="true">
-
-	                    <f:selectItems value="#{blogReaderBean.readers}" var="readerOne"
-	                                itemLabel="#{readerOne.name}" itemValue="#{readerOne}"/>
-	
-		                <p:column>
-	                        <f:facet name="header">
-	                            <h:outputText value="id"/>
-	                        </f:facet>
-	                        <h:outputText value="#{r.id}"/>
-	                    </p:column>
-	                    <p:column>
-	                        <f:facet name="header">
-	                            <h:outputText value="Name"/>
-	                        </f:facet>
-	                        <h:outputText value="#{r.name}"/>
-	                    </p:column>
-	
-	                    <f:facet name="footer">
-	                        <h:outputText value="#{blogReaderBean.readers.size()} readers"
-	                                    style="font-weight:bold;" styleClass="py-1 block"/>
-	                    </f:facet>
-	                </p:selectOneMenu>
-
-			    	<p:outputLabel for="inputBlog" value="Blog" />
-			    	<p:selectOneMenu id="inputBlog" value="#{blogReaderBean.selectedBlogInput}" converter="#{blogConverter}"
-                                panelStyle="width:180px" var="b"
-                                filter="true" filterMatchMode="startsWith" filterNormalize="true">
-
-	                    <f:selectItems value="#{blogReaderBean.blogs}" var="blogOne"
-	                                itemLabel="#{blogOne.tittle}" itemValue="#{blogOne}"/>
-	
-		                <p:column>
-	                        <f:facet name="header">
-	                            <h:outputText value="id"/>
-	                        </f:facet>
-	                        <h:outputText value="#{b.id}"/>
-	                    </p:column>
-	                    <p:column>
-	                        <f:facet name="header">
-	                            <h:outputText value="Tittle"/>
-	                        </f:facet>
-	                        <h:outputText value="#{b.tittle}"/>
-	                    </p:column>
-	
-	                    <f:facet name="footer">
-	                        <h:outputText value="#{blogReaderBean.blogs.size()} blogs"
-	                                    style="font-weight:bold;" styleClass="py-1 block"/>
-	                    </f:facet>
-	                </p:selectOneMenu>	                
+					<p:outputLabel for="blogInput" value="Blog" />
+	                <p:selectOneMenu id="blogInput" value="#{blogReaderBean.selectedBlogInput2}"  required="true" requiredMessage="reader is required">
+	                    <f:selectItem itemLabel="Select Blog" itemValue=""/>
+	                    <f:selectItems value="#{blogReaderBean.blogItems}"/>
+	                </p:selectOneMenu>	
+	                
+	                <p:outputLabel for="readerInput" value="Reader" />
+	                <p:selectOneMenu id="readerInput" value="#{blogReaderBean.selectedReaderInput2}" required="true" requiredMessage="reader is required">
+	                    <f:selectItem itemLabel="Select Reader" itemValue=""/>
+	                    <f:selectItems value="#{blogReaderBean.readerItems}"/>
+	                </p:selectOneMenu>		               	                
+	                	                
 			    	<f:facet name="footer">
-            			<p:commandButton value="Save" icon="pi pi-check" actionListener="#{blogReaderBean.submit}"
-	                    update="dt-blog" process="input inputBlog @this" />		 
+            	 		<p:commandButton value="Save" icon="pi pi-check" actionListener="#{blogReaderBean.submit}"
+	                    update="dt-blog messages" process="readerInput blogInput @this" />		    
+
         			</f:facet>
-			    </p:panelGrid>
-			    <h:message id="input_m" for="input" />
-			    
-   
+			    </p:panelGrid>		
+
 	
-	
-				<p:dataTable id="dt-blog" widgetVar="dtBlog" var="blog" rowKey="#{blog.id}" value="#{blogReaderBean.blogs}" paginator="true" rows="10" paginatorPosition="bottom"
-							rowExpandMode = "single">            
+				<p:dataTable id="dt-blog" widgetVar="dtBlogIN" var="blog" rowKey="#{blog.id}" value="#{blogReaderBean.blogs}">        
 		            <f:facet name="header">
-		                <div class="readers-table-header">
-		                    <span style="font-weight: bold">Readers and blogs</span>
+		                <div class="blogs-table-header">
+		                    <span style="font-weight: bold">Blogs</span>
 		                </div>
-		            </f:facet>	
-		            <p:column headerText="id" sortBy="#{blog.id}" filterBy="#{blog.id}">
+		            </f:facet>				    
+		            <p:column headerText="id" >
 		                <h:outputText value="#{blog.id}" />
 		            </p:column>
-		            <p:column headerText="Tittle" sortBy="#{blog.tittle}" filterBy="#{blog.tittle}">
+		            <p:column headerText="Tittle" >
 		            	<h:outputText value="#{blog.tittle}" />             
 		            </p:column> 
-		            <p:column headerText="Description" sortBy="#{blog.description}" filterBy="#{blog.description}">
+		            <p:column headerText="Description" >
 		            	<h:outputText value="#{blog.description}" />		                  
-		            </p:column>        
-
+		            </p:column>
+					<p:column exportable="false">
+					    <p:commandButton icon="pi pi-pencil" update=":dialogs:manage-product-content"
+					                    oncomplete="PF('manageProductDialog').show()"
+					                    styleClass="edit-button rounded-button ui-button-success" process="@this">
+					                    <f:setPropertyActionListener value="#{blog}" target="#{blogReaderBean.selectedBlog}" />
+					                    <p:resetInput target=":dialogs:manage-product-content" />
+					    </p:commandButton>
+				  </p:column>		               		            
 				</p:dataTable>
-				
-	   			<p:confirmDialog widgetVar="deleteReaderDialog" showEffect="fade" width="300"
-		            message="Delete the reader?" header="Confirm" severity="warn">
-		            <p:commandButton value="Yes" icon="pi pi-check" actionListener="#{blogReaderBean.delete}"
-		                process="@this" update="dt-blog"
-		                onclick="PF('deleteReaderDialog').hide()" />
-		            <p:commandButton value="No" type="button" styleClass="ui-button-secondary" icon="pi pi-times"
-		                onclick="PF('deleteReaderDialog').hide()" />
-		        </p:confirmDialog>
+
 	   		</h:form>
+	   		
+	   <h:form id="dialogs">
+        <p:dialog header="Reader Details" showEffect="fade" modal="true" widgetVar="manageProductDialog"
+            responsive="true">
+            <p:outputPanel id="manage-product-content" class="ui-fluid">
+                <p:outputPanel rendered="#{not empty blogReaderBean.selectedBlog}">
+                    <div class="field">
+                        <p:outputLabel for="name">Name</p:outputLabel>
+                        <p:inputText id="name" value="#{blogReaderBean.selectedBlog.tittle}"  disabled="true"/>
+                    </div>
+                    <div class="field">
+                        <p:outputLabel for="description">Description</p:outputLabel>
+                        <p:inputTextarea id="description" value="#{blogReaderBean.selectedBlog.description}" disabled="true"/>
+                    </div>
+                    <div class="formgrid grid">
+                        <div class="field">
+							<p:dataTable id="dt-reader" widgetVar="dtReaderIN" var="reader" value="#{blogReaderBean.selectedBlog.readers}" >
+					            <f:facet name="header">
+					                <div class="readers-table-header">
+					                    <span style="font-weight: bold">Readers</span>
+					                </div>
+					            </f:facet>								
+								<p:column headerText="id" >
+					                <h:outputText value="#{reader.id}" />
+					            </p:column>
+								<p:column headerText="name" >
+					                <h:outputText value="#{reader.name}" />
+					            </p:column>	
+					            <p:column exportable="false">
+					                <p:commandButton class="ui-button-warning rounded-button" icon="pi pi-trash"
+					                                 process="@this"
+					                                 oncomplete="PF('deleteProductDialog').show()">
+					                    <f:setPropertyActionListener value="#{reader}" target="#{blogReaderBean.selectedReader}" />
+					                </p:commandButton>			
+				                </p:column>		            				            
+							</p:dataTable>
+                        </div>
+                    </div>
+                </p:outputPanel>
+            </p:outputPanel>
+
+            <f:facet name="footer">
+                <p:commandButton value="Cancel" icon="pi pi-times" onclick="PF('manageProductDialog').hide()"
+                    class="ui-button-secondary" type="button" />
+            </f:facet>
+        </p:dialog>
+
+        <p:confirmDialog widgetVar="deleteProductDialog" showEffect="fade" width="300"
+            message="Remove this reader from blog?" header="Confirm" severity="warn">
+            <p:commandButton value="Yes" icon="pi pi-check" actionListener="#{blogReaderBean.delete}"
+                process="@this" update=":form:messages :dialogs:dt-reader"
+                oncomplete="PF('deleteProductDialog').hide()" />
+            <p:commandButton value="No" type="button" styleClass="ui-button-secondary" icon="pi pi-times"
+                onclick="PF('deleteProductDialog').hide()" />
+        </p:confirmDialog>
+
+        <p:confirmDialog global="true" showEffect="fade" width="300">
+            <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" icon="pi pi-check" />
+            <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no ui-button-secondary"
+                icon="pi pi-times" />
+        </p:confirmDialog>
+    </h:form>
+	   		
 			</ui:define>	
 		</ui:composition>	
 	</body>

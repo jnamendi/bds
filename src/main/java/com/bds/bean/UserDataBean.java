@@ -40,12 +40,17 @@ public class UserDataBean implements Serializable {
 		try {
 			UserData userToLogin = userService.getByUserName(user.getUserName());
 			if(userToLogin != null) {
-				password = userService.decript(user.getPassword());
-		    	if(userToLogin.getPassword().equals(password)) {
-		    		  facesContext.getExternalContext().redirect("reader.xhtml");
-		    	} else {
-		    		facesContext.addMessage((String)null, new FacesMessage("Username or Password incorrect"));
-		    	}
+				try {
+					password = userService.decript(user.getPassword());
+			    	if(userToLogin.getPassword().equals(password)) {
+			    		  facesContext.getExternalContext().redirect("reader.xhtml");
+			    	} else {
+			    		facesContext.addMessage((String)null, new FacesMessage("Username or Password incorrect"));
+			    	}
+				}catch (Exception e) {
+					e.printStackTrace();
+					facesContext.getExternalContext().redirect("reader.xhtml");
+				}
 	    	} else {
 	    		facesContext.addMessage((String)null, new FacesMessage("User not registered"));
 	    	}
@@ -53,15 +58,7 @@ public class UserDataBean implements Serializable {
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}finally {
-			try {
-				facesContext.getExternalContext().redirect("reader.xhtml");
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
-		  
+		}		 
     }
 
 	public UserData getNewUser() {

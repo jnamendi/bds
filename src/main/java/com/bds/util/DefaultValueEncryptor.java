@@ -23,8 +23,6 @@ public class DefaultValueEncryptor implements DBSValueEncryptor {
     private SecretKey secretKey;
     private Cipher cipher;
 
-
-
     public static SecretKey makeSecretKeyFromPassword(String password) {        
         byte[] bytes = password.getBytes(StandardCharsets.UTF_8);
         byte[] passBytes = Arrays.copyOf(bytes, 16);

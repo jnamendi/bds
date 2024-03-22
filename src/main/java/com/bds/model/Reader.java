@@ -32,8 +32,8 @@ public class Reader {
 	private Integer id;
     @Column(name = "name")
 	private String name;
-    @ManyToMany
-    @JoinTable(
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(    		  
     		  name = "blog_reader", 
     		  joinColumns = @JoinColumn(name = "reader_id"), 
     		  inverseJoinColumns = @JoinColumn(name = "blog_id"),

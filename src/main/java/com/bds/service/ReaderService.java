@@ -43,4 +43,16 @@ public class ReaderService {
     	entityManager.createNativeQuery(sql).setParameter(1, reader.getId()).setParameter(2, blog.getId())
         .executeUpdate();
     }
+    
+    public void addBlog(int reader, int blog) {
+    	String sql = "Insert into bds_bloggers.blog_reader values (?1,?2) ";
+    	entityManager.createNativeQuery(sql).setParameter(1, reader).setParameter(2,blog)
+        .executeUpdate();
+    }
+    
+    public void removeReaderFromBlog(int reader, int blog) {
+    	String sql = "Delete from bds_bloggers.blog_reader where reader_id=?1 and blog_id = ?2 ";
+    	entityManager.createNativeQuery(sql).setParameter(1, reader).setParameter(2,blog)
+        .executeUpdate();
+    }
 }
